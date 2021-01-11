@@ -16,26 +16,18 @@ const Square = (props) => {
   )
 }
 
-// class Square extends React.Component {
-//   render() {
-//     return (
-//       <button className="square">
-//         {this.props.value}
-//       </button>
-//     );
-//   }
-// }
-
 const Board = (props) => {
 
   const [squares, setSquares] = useState(
     Array(9).fill(null)
   );
+  const [xIsNext, setXIsNext] = useState(true);
 
   const handleClick = (i) => {
     const squaresDummy = squares.slice();
-    squaresDummy[i] = 'X';
+    squaresDummy[i] = xIsNext ? 'X': 'O';
     setSquares(squaresDummy);
+    setXIsNext(!xIsNext);
   }
 
   const renderSquare = (i) => {
