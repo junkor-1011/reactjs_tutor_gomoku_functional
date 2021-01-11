@@ -1,16 +1,32 @@
-import React from 'react';
+import React,
+  { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Square extends React.Component {
-  render() {
-    return (
-      <button className="square">
-        {this.props.value}
-      </button>
-    );
-  }
+const Square = (props) => {
+
+  const [value, setValue] = useState(null);
+
+  return (
+    <button
+      className="square"
+      onClick={() => setValue('X')}
+    >
+      {/* {props.value} */}
+      {value}
+    </button>
+  )
 }
+
+// class Square extends React.Component {
+//   render() {
+//     return (
+//       <button className="square">
+//         {this.props.value}
+//       </button>
+//     );
+//   }
+// }
 
 const Board = (props) => {
   const renderSquare = (i) => {
