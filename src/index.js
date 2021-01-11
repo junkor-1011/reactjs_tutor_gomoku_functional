@@ -25,6 +25,9 @@ const Board = (props) => {
 
   const handleClick = (i) => {
     const squaresDummy = squares.slice();
+    if (calculateWinner(squaresDummy) || squaresDummy[i]) {
+      return
+    }
     squaresDummy[i] = xIsNext ? 'X': 'O';
     setSquares(squaresDummy);
     setXIsNext(!xIsNext);
