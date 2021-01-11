@@ -29,8 +29,13 @@ const Square = (props) => {
 // }
 
 const Board = (props) => {
+
+  const [squares, setSquares] = useState(
+    Array(9).fill(null)
+  );
+
   const renderSquare = (i) => {
-    return <Square value={i} />
+    return <Square value={squares[i]} />
   }
   const status = 'Next player: X';
   return (
