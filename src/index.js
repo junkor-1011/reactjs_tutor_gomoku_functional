@@ -60,16 +60,36 @@ const Game = () => {
       },
     ]
   );
-  const current = history[history.length -1];
-  const winner = calculateWinner(current.squares);
   const [xIsNext, setXIsNext] = useState(true);
+  const [stepNumber, setStepNumber] = useState(0);
+  const current = history[stepNumber];
+  const winner = calculateWinner(current.squares);
+
+  const jumpTo = (step) => {
+    setStepNumber(step);
+    setXIsNext((step % 2) === 0);
+  }
+
+  const moves = history.map((step, move) => {
+    const desc = move ?
+      `Go to move #${move}` :
+      `Go to game start`;
+    return (
+      <li key={move}>
+        <button
+          onClick={() => {jumpTo(move)}}
+        >{desc}</button>
+      </li>
+    )
+  });
+
   const status = winner ?
     `Winner: ${winner}` :
     `Next player: ${xIsNext ? 'X' : 'O'}`;
 
   const handleClick = (i) => {
-    const historyDummy = history;
-    const current = history[history.length - 1];
+    const historyDummy = history.slice(0, stepNumber + 1);
+    const current = historyDummy[historyDummy.length - 1];
     const squaresDummy = current.squares.slice();
     if (calculateWinner(squaresDummy) || squaresDummy[i]) {
       return
@@ -80,6 +100,7 @@ const Game = () => {
         squares: squaresDummy,
       }]),
     );
+    setStepNumber(historyDummy.length);
     setXIsNext(!xIsNext);
   }
 
@@ -93,7 +114,7 @@ const Game = () => {
       </div>
       <div className="game-info">
         <div>{status}</div>
-        <ol>{/* TODO */}</ol>
+        <ol>{moves}</ol>
       </div>
     </div>
   )
