@@ -18,38 +18,38 @@ const Square = (props) => {
 
 const Board = (props) => {
 
-  const [squares, setSquares] = useState(
-    Array(9).fill(null)
-  );
-  const [xIsNext, setXIsNext] = useState(true);
+  // const [squares, setSquares] = useState(
+  //   Array(9).fill(null)
+  // );
+  // const [xIsNext, setXIsNext] = useState(true);
 
-  const handleClick = (i) => {
-    const squaresDummy = squares.slice();
-    if (calculateWinner(squaresDummy) || squaresDummy[i]) {
-      return
-    }
-    squaresDummy[i] = xIsNext ? 'X': 'O';
-    setSquares(squaresDummy);
-    setXIsNext(!xIsNext);
-  }
+  // const handleClick = (i) => {
+  //   const squaresDummy = squares.slice();
+  //   if (calculateWinner(squaresDummy) || squaresDummy[i]) {
+  //     return
+  //   }
+  //   squaresDummy[i] = xIsNext ? 'X': 'O';
+  //   setSquares(squaresDummy);
+  //   setXIsNext(!xIsNext);
+  // }
 
   const renderSquare = (i) => {
     return (
       <Square
-        value={squares[i]}
-        onClick={() => handleClick(i)}
+        value={props.squares[i]}
+        onClick={() => props.onClick(i)}
       />
     )
   }
 
-  const winner = calculateWinner(squares);
-  const status = winner ?
-    `Winner: ${winner}`:
-    `Next player: ${xIsNext ? 'X' : 'O'}`;
+  const winner = calculateWinner(props.squares);
+  // const status = winner ?
+  //   `Winner: ${winner}`:
+  //   `Next player: ${xIsNext ? 'X' : 'O'}`;
 
   return (
     <div>
-      <div className="status">{status}</div>
+      {/* <div className="status">{status}</div> */}
       <div className="board-row">
         {renderSquare(0)}
         {renderSquare(1)}
@@ -101,13 +101,47 @@ const Board = (props) => {
 // }
 
 const Game = () => {
+
+  const [history, setHistory] = useState(
+    [
+      {
+        squares: Array(9).fill(null),
+      },
+    ]
+  );
+  const current = history[history.length -1];
+  const winner = calculateWinner(current.squares);
+  const [xIsNext, setXIsNext] = useState(true);
+  const status = winner ?
+    `Winner: ${winner}` :
+    `Next player: ${xIsNext ? 'X' : 'O'}`;
+
+  const handleClick = (i) => {
+    const historyDummy = history;
+    const current = history[history.length - 1];
+    const squaresDummy = current.squares.slice();
+    if (calculateWinner(squaresDummy) || squaresDummy[i]) {
+      return
+    }
+    squaresDummy[i] = xIsNext ? 'X': 'O';
+    setHistory(
+      historyDummy.concat([{
+        squares: squaresDummy,
+      }]),
+    );
+    setXIsNext(!xIsNext);
+  }
+
   return (
     <div className="game">
       <div className="game-board">
-        <Board />
+        <Board
+          squares={current.squares}
+          onClick={handleClick}
+        />
       </div>
       <div className="game-info">
-        <div>{/* status */}</div>
+        <div>{status}</div>
         <ol>{/* TODO */}</ol>
       </div>
     </div>
